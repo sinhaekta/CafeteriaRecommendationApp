@@ -1,7 +1,7 @@
 import json
 from client import client_connection
 
-class viewMenu:
+class ViewMenu:
     def __init__(self):
         pass
     

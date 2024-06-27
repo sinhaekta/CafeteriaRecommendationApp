@@ -1,7 +1,7 @@
 import json
 from client import client_connection
 
-class rollMenu:
+class RollMenu:
     import json
     
     def __init__(self):

@@ -1,7 +1,7 @@
 import socket
 import signal
 import json
-from route import Route  
+from ServerController.route import Route  
 
 def signal_handler(sig, frame):
     print("\nStopping server...")

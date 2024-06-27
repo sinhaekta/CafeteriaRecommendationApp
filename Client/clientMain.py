@@ -1,4 +1,4 @@
-from Controller.Home import CafeteriaApp
+from ClientController.Home import CafeteriaApp
 
 def main():
     app = CafeteriaApp()

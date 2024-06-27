@@ -1,7 +1,7 @@
 import json
 from client import client_connection
 
-class addMenu:
+class AddMenu:
     
     def __init__(self):
         pass

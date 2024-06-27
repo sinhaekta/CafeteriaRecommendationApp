@@ -1,30 +1,30 @@
 from client import client_connection
-from Admin.addMenuItem import addMenu
-from Admin.deleteMenuItem import deleteMenu
-from Admin.updateMenuItem import updateMenu
-from Admin.viewMenuItems import viewMenu
+from Admin.addMenuItem import AddMenu
+from Admin.deleteMenuItem import DeleteMenu
+from Admin.updateMenuItem import UpdateMenu
+from Admin.viewMenuItems import ViewMenu
 
-class admin_menu:
+class AdminMenu:
     
     def __init__(self):
         pass
 
     def main(self):
         while True:
-            self.display_menu()
+            self.display_admin_menu()
             choice = input("Enter your choice: ")
 
             if choice == '1':
-                add = addMenu()
+                add = AddMenu()
                 add.add_menu_item()
             elif choice == '2':
-                delete = deleteMenu()
+                delete = DeleteMenu()
                 delete.delete_menu_item()
             elif choice == '3':
-                update = updateMenu()
+                update = UpdateMenu()
                 update.update_menu_item()
             elif choice == '4':
-                view = viewMenu()
+                view = ViewMenu()
                 view.view_menu_items()
             elif choice == '5':
                 print("Exiting...")
@@ -32,7 +32,7 @@ class admin_menu:
             else:
                 print("Invalid choice. Please try again.")
 
-    def display_menu(self):
+    def display_admin_menu(self):
         print("Admin Menu")
         print("1. Add Menu Item")
         print("2. Delete Menu Item")

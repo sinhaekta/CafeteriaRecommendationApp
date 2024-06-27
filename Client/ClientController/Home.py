@@ -1,8 +1,8 @@
 import json
 from getpass import getpass
 from client import client_connection
-from Admin.adminMenu import admin_menu
-from Chef.chefMenu import chef_menu
+from ClientController.adminMenu import admin_menu
+from ClientController.chefMenu import chef_menu
 
 class CafeteriaApp:
     def __init__(self):

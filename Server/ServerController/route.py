@@ -1,4 +1,4 @@
-from auth import Authentication
+from Services.auth import Authentication
 from DB_Connection.user_queries import UserQuery
 
 class Route:
@@ -8,7 +8,7 @@ class Route:
         print(data["path"])
         
         if data["path"] == "auth":
-            response = Authentication.authenticateUser(data)
+            response = Authentication.authenticate_user(data)
             return response
         
         elif data["path"] == "add_menu_item":

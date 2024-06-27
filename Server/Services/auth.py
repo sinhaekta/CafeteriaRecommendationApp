@@ -1,12 +1,12 @@
 from DB_Connection.user_queries import UserQuery
 
 class Authentication:
-    def authenticateUser(data):
+    def authenticate_user(data):
         username = data["username"]
         password = data["password"]
         print(username, password)
         print(type(username))
-        json_data = UserQuery.authenticateUser(username)
+        json_data = UserQuery.authenticate_user_query(username)
         print(type(json_data))
         actual_password = json_data[0]["password"]
         if(password == actual_password):
