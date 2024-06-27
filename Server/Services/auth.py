@@ -7,6 +7,7 @@ class Authentication:
         print(username, password)
         print(type(username))
         json_data = UserQuery.authenticate_user_query(username)
+        print(json_data)
         print(type(json_data))
         actual_password = json_data[0]["password"]
         if(password == actual_password):
@@ -14,5 +15,3 @@ class Authentication:
             return json_data[0]["role"]
         else:
             return "Incorrect password."
-        
-        

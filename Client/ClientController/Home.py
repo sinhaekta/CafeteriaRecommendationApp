@@ -1,8 +1,9 @@
 import json
 from getpass import getpass
 from client import client_connection
-from ClientController.adminMenu import admin_menu
-from ClientController.chefMenu import chef_menu
+from ClientController.adminMenu import AdminMenu
+from ClientController.chefMenu import ChefMenu
+from ClientController.employeeMenu import EmployeeMenu
 
 class CafeteriaApp:
     def __init__(self):
@@ -30,7 +31,7 @@ class CafeteriaApp:
         }
         return json.dumps(data)
 
-    def run(self):
+    def main(self):
         self.display_homepage()
         self.get_user_input()
         user_data = self.to_json()
@@ -39,16 +40,17 @@ class CafeteriaApp:
 
         role = response.strip('"')
         if role == "admin":
-            menu = admin_menu()
+            menu = AdminMenu()
             menu.main()
         elif role == "chef":
-            menu = chef_menu()
+            menu = ChefMenu()
             menu.main()
         elif role == "employee":
-            print("Employee functionality not implemented yet.")
+            menu = EmployeeMenu()
+            menu.main()
         else:
             print("Invalid role.")
 
 if __name__ == "__main__":
     app = CafeteriaApp()
-    app.run()
+    app.main()

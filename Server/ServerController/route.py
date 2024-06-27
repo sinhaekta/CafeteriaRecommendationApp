@@ -1,9 +1,11 @@
 from Services.auth import Authentication
+from Services.add_item import AddItem
+from Services.roll_menu import RollMenu 
 from DB_Connection.user_queries import UserQuery
 
 class Route:
     @staticmethod
-    def redirect(data):
+    def redirect_client_data(data):
         print("in route")
         print(data["path"])
         
@@ -12,7 +14,7 @@ class Route:
             return response
         
         elif data["path"] == "add_menu_item":
-            response = UserQuery.add_menu_item(data["name"], data["price"], data["description"], data["category"])
+            response = AddItem.add_menu_item(data["name"], data["price"], data["description"], data["category"])
             return response
 
         elif data["path"] == "delete_menu_item":
@@ -28,8 +30,20 @@ class Route:
             return response
  
         elif data["path"] == "view_recommended_menu":
-            response = UserQuery.view_recommended_menu()
+            response = UserQuery.view_recommended_menu()  
             return response       
         
+        elif data["path"] == "roll_menu_item":
+            response = RollMenu.roll_menu(data["items"])
+            return response
+        
+        elif data["path"] == "send_notification":
+            response = UserQuery.send_notification()
+            return response
+        
+        elif data["path"] == "check_notification":
+            response = UserQuery.check_notification()
+            return response
 
-        return {"status": "error", "message": "Invalid path"}
+        else:
+            return {"status": "error", "message": "Invalid path"}

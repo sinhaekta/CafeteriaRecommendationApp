@@ -38,6 +38,4 @@ class AdminMenu:
         print("2. Delete Menu Item")
         print("3. Update Menu Item")
         print("4. View Menu Items")
-        print("5. Exit")
-    
-    
+        print("5. Exit")   
