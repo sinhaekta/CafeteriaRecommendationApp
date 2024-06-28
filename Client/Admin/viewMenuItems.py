@@ -1,5 +1,5 @@
 import json
-from client import client_connection
+from client import client_connection  
 from tabulate import tabulate
 
 class ViewMenu:
@@ -14,15 +14,34 @@ class ViewMenu:
         request_json = json.dumps(request_data)
         response = client_connection(request_json)
         
-        response = json.loads(response)
+        if not response:
+            print("Empty response received.")
+            return
         
-        if response["status"] == "success":
-            data = response["data"]
-            headers = ["Item ID", "Name", "Price", "Description", "Category", "Availability", "Likes", "Dislikes", "Recommend Rating"]
-            table = [[item["item_id"], item["name"], item["price"], item["description"], item["category"], item["availability"], item["likes"], item["dislikes"], item["recommend_rating"]] for item in data]
-            print(tabulate(table, headers, tablefmt="grid"))
+        try:
+            response_data = json.loads(response)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON response: {str(e)}")
+            print(f"Response content: {response}")
+            return
+        
+        if response_data.get("status") == "success":
+            data = response_data.get("data", [])
+            if not data:
+                print("No data found in response.")
+                return
+            
+            headers = ["Item ID", "Name", "Price", "Description", "Category", "Availability"]
+            table_data = []
+
+            for item in data:
+                item_id = item.get("item_id", "")
+                name = item.get("name", "")
+                price = item.get("price", "")
+                description = item.get("description", "")
+                category = item.get("category", "")
+                table_data.append([item_id, name, price, description, category])
+
+            print(tabulate(table_data, headers=headers, tablefmt="grid"))
         else:
-            print(response["message"])
-
-
-
+            print(f"Error response: {response_data.get('message', 'Unknown error')}")
