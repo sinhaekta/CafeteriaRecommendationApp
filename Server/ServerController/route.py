@@ -44,6 +44,18 @@ class Route:
         elif data["path"] == "check_notification":
             response = UserQuery.check_notification()
             return response
+        
+        elif data["path"] == "order_food":
+            response = UserQuery.order_food(data)
+            return response
+        
+        elif data["path"] == "fetch_employee_orders":
+            response = UserQuery.fetch_employee_orders(data["user_id"])
+            return response
+        
+        elif data["path"] == "give_feedback":
+            response = UserQuery.give_feedback(data)
+            return response
 
         else:
             return {"status": "error", "message": "Invalid path"}
