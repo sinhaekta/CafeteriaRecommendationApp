@@ -1,5 +1,6 @@
 from DB_Connection.chefQueries import ChefQuery
 from datetime import datetime
+import json
 
 class ChefServiceHandler:
     @staticmethod
@@ -32,3 +33,12 @@ class ChefServiceHandler:
             return ChefQuery.send_notification_query()
         except Exception as e:
             return {"status": "error", "message": str(e)}
+             
+    @staticmethod
+    def view_discard_menu():
+        try:
+            discard_menu_json = ChefQuery.view_discard_menu_query()
+            print("Discard menu JSON:", discard_menu_json)
+            return discard_menu_json
+        except Exception as e:
+            return json.dumps({"status": "error", "message": str(e)})

@@ -56,6 +56,10 @@ class Route:
         elif data["path"] == "give_feedback":
             response = EmployeeServiceHandler.give_feedback(data)
             return response
+        
+        elif data["path"] == "view_discard_menu":
+            response = ChefServiceHandler.view_discard_menu()
+            return response
 
         else:
             return {"status": "error", "message": "Invalid path"}

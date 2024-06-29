@@ -124,5 +124,48 @@ class ChefQuery:
                 if connection:
                     connection.close()        
                     
-        
-        
+    @classmethod
+    def view_discard_menu_query(cls):
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor(dictionary=True)
+
+                cursor.execute("""
+                    SELECT r.item_id, m.name as item_name, MIN(r.rating_value) as rating_value
+                    FROM Rating r
+                    JOIN Menu_Item m ON r.item_id = m.item_id
+                    GROUP BY r.item_id, m.name
+                    ORDER BY rating_value ASC
+                    LIMIT 2
+                """)
+                items_to_discard = cursor.fetchall()
+                print("Items to discard:", items_to_discard)
+
+                cursor.execute("DELETE FROM Discard_Items")
+
+                for item in items_to_discard:
+                    cursor.execute("""
+                        INSERT INTO Discard_Items (item_id, item_name, rating_value)
+                        VALUES (%s, %s, %s)
+                    """, (item['item_id'], item['item_name'], item['rating_value']))
+
+                connection.commit()
+
+                cursor.execute("SELECT * FROM Discard_Items")
+                discard_menu = cursor.fetchall()
+                print("Discard menu items:", discard_menu)
+
+                cursor.close()
+                connection.close()
+
+                return json.dumps(discard_menu)
+            else:
+                print("Failed to establish database connection.")
+                return json.dumps({"status": "error", "message": "Failed to establish database connection."})
+
+        except Exception as e:
+            print("Error occurred:", e)
+            return json.dumps({"error": str(e)})
