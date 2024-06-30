@@ -15,20 +15,27 @@ class Notification:
             response = client_connection(request_json)
 
             if response:
-                response_data = json.loads(response)
-                if response_data["status"] == "success":
-                    notifications = response_data["data"]
-                    print("Notifications:")
-                    for notification in notifications:
-                        print(f"Notification ID: {notification['notification_id']}")
-                        print(f"Message: {notification['message']}")
-                        print(f"Date: {notification['notification_date']}")
-                        print("------------")
-                else:
-                    print(f"Error: {response_data['message']}")
+                try:
+                    response_data = json.loads(response)
+                    if response_data["status"] == "success":
+                        notifications = response_data["data"]
+                        if notifications:
+                            latest_notification = notifications[0]
+                            print("Notification:")
+                            print(f"Notification ID: {latest_notification.get('notification_id', '')}")
+                            print(f"Message: {latest_notification.get('message', '')}")
+                            print("------------")
+                        else:
+                            print("No notifications found.")
+                    else:
+                        print(f"Error: {response_data.get('message', 'Unknown error')}")
+                except json.JSONDecodeError as e:
+                    print(f"JSON decoding failed: {e}")
+                    print(f"Response content: {response}")
             else:
                 print("Empty response received from server.")
-        
-        except Exception as e:
-            print("Error occurred during request:", e)
 
+        except ConnectionError:
+            print("Failed to connect to the server. Please check your network connection and try again.")
+        except Exception as e:
+            print(f"Error occurred during request: {e}")

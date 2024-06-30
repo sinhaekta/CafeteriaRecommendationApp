@@ -1,21 +1,22 @@
+import config
 import json
 from client import client_connection
 
 class AddMenu:
     
-    def __init__(self, max_attempts=2):
-        self.max_attempts = max_attempts
-        
+    def __init__(self):
+        pass
+    
     def add_menu_item(self):
         
-        for attempt in range(1, self.max_attempts + 1):
+        for attempt in range(1, config.MAX_ATTEMPT + 1):
             try:
                 name = input("Enter item name: ")
                 if not name:
                     raise ValueError("Item name cannot be empty.")
                 
                 price = float(input("Enter item price: ")) 
-                if price <= 0:
+                if price <= config.MIN_ATTEMPT:
                     raise ValueError("Price must be a positive number.")
                 
                 description = input("Enter item description: ")
@@ -45,16 +46,16 @@ class AddMenu:
 
                 else:
                     print("Error:", response_data.get("message"))  
-                    if attempt < self.max_attempts:
+                    if attempt < config.MAX_ATTEMPT:
                         print("Please try again.")
 
             except ValueError as ve:
                 print("Input validation error:", ve)
-                if attempt < self.max_attempts:
+                if attempt < config.MAX_ATTEMPT:
                     print("Please try again.")
 
             except Exception as e:
                 print("Error occurred:", e)
                 return
 
-        print(f"Maximum attempts ({self.max_attempts}) reached. Exiting.")
+        print(f"Maximum attempts ({config.MAX_ATTEMPT}) reached. Exiting.")

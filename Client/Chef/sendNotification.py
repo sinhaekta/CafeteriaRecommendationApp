@@ -15,10 +15,16 @@ class Notification:
             response = client_connection(request_json)
 
             if response:
-                response_data = json.loads(response)
-                print("Response:", response_data)
+                try:
+                    response_data = json.loads(response)
+                    print("Response:", response_data)
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding JSON response: {e}")
+                    print(f"Response content: {response}")
             else:
                 print("Empty response received from server.")
         
+        except ConnectionError:
+            print("Failed to connect to the server. Please check your network connection and try again.")
         except Exception as e:
             print("Error occurred during request:", e)

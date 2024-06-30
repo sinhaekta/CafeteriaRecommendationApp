@@ -1,6 +1,7 @@
 import socket
 import signal
 import json
+import config
 from ServerController.route import Route  
 
 def signal_handler(sig, frame):
@@ -11,8 +12,8 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 def start_server():
-    SERVER_HOST = '0.0.0.0' 
-    SERVER_PORT = 12358
+    SERVER_HOST = config.SERVER_HOST 
+    SERVER_PORT = config.SERVER_PORT
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -37,7 +38,7 @@ def start_server():
                 continue 
             print(json_data)
             try:
-                response = Route.redirect(json_data)
+                response = Route.redirect_client_data(json_data)
                 print(response, type(response))
                 response_json = json.dumps(response) 
             except Exception as e:

@@ -1,6 +1,6 @@
 import json
 from tabulate import tabulate
-from client import client_connection  
+from client import client_connection
 
 class DiscardMenu:
     def __init__(self):
@@ -13,24 +13,27 @@ class DiscardMenu:
             }
 
             request_json = json.dumps(request_data)
-            print("Request JSON:", request_json)  
+            print("Request JSON:", request_json)
             response = client_connection(request_json)
-            print("Response:", response)  
+            print("Response:", response)
 
             if response:
                 try:
                     response = response.replace('\\"', '"')
-                    
+
                     if response.startswith('"') and response.endswith('"'):
                         response = response.strip('"')
-                        
-                    response_data = json.loads(response) 
+
+                    response_data = json.loads(response)
                     print("Received Data:", response_data)
-                    print("Type of Received Data:", type(response_data)) 
+                    print("Type of Received Data:", type(response_data))
 
                     if isinstance(response_data, list):
                         headers = ["Discard ID", "Item ID", "Item Name", "Rating Value"]
-                        table_data = [[item["discard_id"], item["item_id"], item["item_name"], item["rating_value"]] for item in response_data]
+                        table_data = [[item.get("discard_id", ""),
+                                       item.get("item_id", ""),
+                                       item.get("item_name", ""),
+                                       item.get("rating_value", "")] for item in response_data]
                         table = tabulate(table_data, headers, tablefmt="grid")
                         print(table)
                     else:
@@ -43,5 +46,7 @@ class DiscardMenu:
             else:
                 print("Empty response received from server.")
 
+        except ConnectionError:
+            print("Failed to connect to the server. Please check your network connection and try again.")
         except Exception as e:
             print("Error occurred during request:", e)
