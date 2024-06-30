@@ -2,6 +2,7 @@ from Chef.rollOutMenu import RollMenu
 from Chef.viewRecommendation import Recommendation
 from Chef.sendNotification import Notification
 from Chef.viewDiscardMenu import DiscardMenu
+from Chef.manageDiscardMenu import ManageDiscardMenu  # Import the new class
 from Admin.viewMenuItems import ViewMenu
 
 class ChefMenu:
@@ -29,6 +30,9 @@ class ChefMenu:
                 discard = DiscardMenu()  
                 discard.view_discard_menu() 
             elif choice == '6':
+                manage = ManageDiscardMenu()
+                manage.manage_discard_menu()
+            elif choice == '7':
                 print("Exiting....")
                 break
             else:
@@ -41,4 +45,5 @@ class ChefMenu:
         print("3. Send notification")
         print("4. View Menu")
         print("5. View Discard Menu")
-        print("6. Exit")
+        print("6. Manage Discard Menu")
+        print("7. Exit")

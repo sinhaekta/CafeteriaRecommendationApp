@@ -1,7 +1,6 @@
 from DB_Connection.employeeQueries import EmployeeQuery
 from datetime import datetime, date
 
-
 class EmployeeServiceHandler:
     
     @staticmethod
@@ -33,5 +32,21 @@ class EmployeeServiceHandler:
         try:
             feedback_result = EmployeeQuery.give_feedback_query(data)
             return feedback_result
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        
+    @staticmethod
+    def give_feedback_discard_item(data):
+        try:
+            feedback_result = EmployeeQuery.give_feedback_discard_item_query(data)
+            return feedback_result
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    @staticmethod
+    def fetch_discard_item_notifications():
+        try:
+            notifications_data = EmployeeQuery.fetch_discard_item_notifications_query()
+            return notifications_data
         except Exception as e:
             return {"status": "error", "message": str(e)}
