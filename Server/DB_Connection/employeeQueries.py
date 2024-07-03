@@ -9,37 +9,34 @@ from datetime import date
 class EmployeeQuery:  
     @classmethod
     def check_notification_query(cls):
-            try:
-                db = DBConnection()
-                connection = db.get_connection()
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
 
-                if connection:
-                    cursor = connection.cursor()
-                    cursor.execute("SELECT * FROM Notification ORDER BY notification_date DESC")
-                    notifications = cursor.fetchall()
-                    cursor.close()
+            if connection:
+                cursor = connection.cursor()
+                cursor.execute("SELECT * FROM Notification ORDER BY notification_date DESC LIMIT 1")
+                notification = cursor.fetchone() 
+                cursor.close()
 
-                    if notifications:
-                        formatted_notifications = [
-                            {
-                                "notification_id": notification[0],
-                                "message": notification[1],
-                                "notification_date": notification[2].strftime("%Y-%m-%d")
-                            }
-                            for notification in notifications
-                        ]
-                        return {"status": "success", "data": formatted_notifications}
-                    else:
-                        return {"status": "error", "message": "No notifications found."}
+                if notification:
+                    formatted_notification = {
+                        "notification_id": notification[0],
+                        "message": notification[1], 
+                        "notification_date": notification[2].strftime("%Y-%m-%d")
+                    }
+                    return {"status": "success", "data": [formatted_notification]}  
                 else:
-                    return {"status": "error", "message": "Failed to establish database connection."}
+                    return {"status": "error", "message": "No notifications found."}
+            else:
+                return {"status": "error", "message": "Failed to establish database connection."}
 
-            except Exception as e:
-                return {"status": "error", "message": str(e)}
-            finally:
-                if connection:
-                    connection.close()
-                    
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        finally:
+            if connection:
+                connection.close()
+                        
     @classmethod
     def order_food_query(cls, data):
             try:

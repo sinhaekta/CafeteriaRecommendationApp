@@ -14,7 +14,12 @@ class ChefServiceHandler:
 
             item_rating = {}
 
-            for item_id, item_name, comment, rating_value in feedback_data:
+            for row in feedback_data:
+                item_id = row['item_id']
+                item_name = row['item_name']
+                comment = row['comment']
+                rating_value = row['rating_value']
+
                 sentiment = TextBlob(comment).sentiment.polarity
                 rating_score = float(rating_value) if rating_value else 0.0
 
@@ -29,9 +34,13 @@ class ChefServiceHandler:
 
             average_score = {item_name: round(min(sum(scores) / len(scores), 5.0), 2) for item_name, scores in item_rating.items()}
 
-            recommended_items = sorted(average_score.items(), key=lambda x: x[1], reverse=True)
+            update_status = ChefQuery.update_avg_rating(average_score)
 
-            recommended_items_list = [[item_name, score] for item_name, score in recommended_items]
+            if not update_status:
+                return json.dumps({"status": "error", "message": "Failed to update average ratings in Menu_Item table"})
+
+            recommended_items = sorted(average_score.items(), key=lambda x: x[1], reverse=True)
+            recommended_items_list = [{"item_name": item_name, "average_score": score} for item_name, score in recommended_items]
             recommended_items_json = json.dumps(recommended_items_list)
             print(recommended_items_json)
 
@@ -41,6 +50,7 @@ class ChefServiceHandler:
             error_message = f"Error occurred in view_recommended_menu: {str(e)}"
             print(error_message)
             return json.dumps({"status": "error", "message": error_message})
+
 
 
     @staticmethod
@@ -58,8 +68,10 @@ class ChefServiceHandler:
                 }
                 for item in items
             ]
-            return ChefQuery.roll_menu_item_query(daily_menu)
-        
+
+            result = ChefQuery.roll_menu_item_query(daily_menu)
+            return json.dumps(result)
+
         except Exception as e:
             error_message = f"Error occurred in roll_menu: {str(e)}"
             print(error_message)

@@ -10,12 +10,13 @@ CREATE TABLE User (
 );
  
 CREATE TABLE Menu_Item (
-    item_id int PRIMARY KEY AUTO_INCREMENT,
-    name varchar(255) NOT NULL UNIQUE,
-    price decimal(10, 2) NOT NULL,
-    description text NOT NULL,
-    category enum('breakfast', 'lunch', 'dinner', 'all day') NOT NULL,
-    is_deleted BOOLEAN DEFAULT FALSE
+    item_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    price DECIMAL(10, 2) NOT NULL,
+    description TEXT NOT NULL,
+    category ENUM('breakfast', 'lunch', 'dinner', 'all day') NOT NULL,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    avg_rating FLOAT DEFAULT 0.0
 );
  
 CREATE TABLE Comment (
@@ -42,11 +43,12 @@ CREATE TABLE Notification (
 );
  
 CREATE TABLE Daily_Menu (
-    menu_date date NOT NULL,
-    item_id int NOT NULL,
-    item_name  varchar(255) NOT NULL,
-    item_category  varchar(255) NOT NULL,
-    PRIMARY KEY(item_id, menu_date),
+    menu_date DATE NOT NULL,
+    item_id INT NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    item_category VARCHAR(255) NOT NULL,
+    average_rating FLOAT,
+    PRIMARY KEY (item_id, menu_date),
     FOREIGN KEY (item_id) REFERENCES Menu_Item(item_id) ON DELETE CASCADE
 );
  

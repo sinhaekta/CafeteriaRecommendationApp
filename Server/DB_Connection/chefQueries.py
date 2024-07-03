@@ -5,124 +5,144 @@ from textblob import TextBlob
 import traceback
 from datetime import datetime
     
-class ChefQuery:   
+class ChefQuery:  
     @classmethod
     def view_recommended_menu_query(cls):
-            try:
-                db = DBConnection()
-                connection = db.get_connection()
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
 
-                if connection:
-                    cursor = connection.cursor()
-                    cursor.execute("""
-                        SELECT c.item_id, c.name AS item_name, c.comment, r.rating_value 
-                        FROM Comment c 
-                        LEFT JOIN Rating r ON c.item_id = r.item_id
-                        -- Optionally join Item table if necessary
-                        -- LEFT JOIN Item i ON c.item_id = i.item_id
-                    """)
-                    feedback = cursor.fetchall()
-                    print("Number of feedback rows fetched:", len(feedback))
+            if connection:
+                cursor = connection.cursor(dictionary=True)
+                cursor.execute("""
+                    SELECT c.item_id, c.name AS item_name, c.comment, r.rating_value 
+                    FROM Comment c 
+                    LEFT JOIN Rating r ON c.item_id = r.item_id
+                """)
+                feedback = cursor.fetchall()
+                print("Number of feedback rows fetched:", len(feedback))
 
-                    item_rating = {}
+                cursor.close()
+                connection.close()
 
-                    for item_id, item_name, comment, rating_value in feedback:
-                        sentiment = TextBlob(comment).sentiment.polarity
-                        rating_score = float(rating_value) if rating_value else 0.0
+                return feedback 
 
-                        combined_score = sentiment + rating_score
-
-                        if item_name in item_rating:
-                            item_rating[item_name].append(combined_score)
-                        else:
-                            item_rating[item_name] = [combined_score]
-
-                    print("Item Ratings:", item_rating)
-
-                    average_score = {item_name: round(sum(scores) / len(scores), 2) for item_name, scores in item_rating.items()}
-
-                    recommended_items = sorted(average_score.items(), key=lambda x: x[1], reverse=True)
-
-                    recommended_items_list = [[item_name, score] for item_name, score in recommended_items]
-                    recommended_items_json = json.dumps(recommended_items_list)
-                    print(recommended_items_json)
-
-                    return recommended_items_json
-
-            except Exception as e:
-                print("Error occurred:", e)
-                return json.dumps({"error": str(e)})    
+        except Exception as e:
+            print("Error occurred:", e)
+            return [] 
         
     @classmethod
+    def update_avg_rating(cls, average_score):
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor()
+                for item_name, score in average_score.items():
+                    cursor.execute("""
+                        UPDATE Menu_Item
+                        SET avg_rating = %s
+                        WHERE name = %s
+                    """, (score, item_name))
+                connection.commit()
+                cursor.close()
+                connection.close()
+
+                return True  
+
+        except Exception as e:
+            print("Error occurred during avg_rating update:", e)
+            return False
+            
+    @classmethod
     def roll_menu_item_query(cls, daily_menu):
-            try:
-                db = DBConnection()
-                connection = db.get_connection()
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
 
-                if connection:
-                    cursor = connection.cursor()
+            if connection:
+                cursor = connection.cursor()
+
+                for item in daily_menu:
+                    cursor.execute("""
+                        SELECT AVG(avg_rating) AS average_rating
+                        FROM Menu_Item
+                        WHERE name = %s
+                    """, (item['item_name'],))
+                    result = cursor.fetchone()  
+
+                    if result:
+                        average_rating = result[0] if result[0] is not None else 0.0
+                    else:
+                        average_rating = 0.0  
+
+                    cursor.execute(
+                        "INSERT INTO Daily_Menu (menu_date, item_id, item_name, item_category, average_rating) VALUES (%s, %s, %s, %s, %s)",
+                        (item['menu_date'], item['item_id'], item['item_name'], item['item_category'], average_rating)
+                    )
+
+                connection.commit()
+                cursor.close()
+
+                return {"status": "success", "message": "Daily menu updated successfully"}
+            else:
+                return {"status": "error", "message": "Failed to establish database connection"}
+
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        finally:
+            if connection:
+                connection.close()
+
+                         
+    @classmethod
+    def send_notification_query(cls):
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor()
+                today_date = datetime.now().strftime("%Y-%m-%d")
+
+                cursor.execute(
+                    "SELECT dm.item_id, dm.item_name, dm.item_category, mi.avg_rating "
+                    "FROM Daily_Menu dm "
+                    "LEFT JOIN Menu_Item mi ON dm.item_id = mi.item_id "
+                    "WHERE dm.menu_date = %s",
+                    (today_date,)
+                )
+                items = cursor.fetchall()
+                cursor.close()
+
+                if items:
+                    notification_message = f"Daily menu updated with the following items:\n"
+                    for item in items:
+                        item_name = item[1]
+                        item_category = item[2]
+                        avg_rating = item[3] if item[3] is not None else "N/A"
+                        notification_message += f"- {item_name} ({item_category}) - Rating: {avg_rating}\n"
                     
-                    for item in daily_menu:
-                        cursor.execute(
-                            "INSERT INTO Daily_Menu (menu_date, item_id, item_name, item_category) VALUES (%s, %s, %s, %s)",
-                            (item['menu_date'], item['item_id'], item['item_name'], item['item_category'])
-                        )
-
+                    cursor = connection.cursor()
+                    cursor.execute(
+                        "INSERT INTO Notification (message, notification_date) VALUES (%s, %s)",
+                        (notification_message, today_date)
+                    )
                     connection.commit()
                     cursor.close()
 
-                    return {"status": "success", "message": "Daily menu updated successfully"}
+                    return {"status": "success", "message": "Notification sent successfully."}
                 else:
-                    return {"status": "error", "message": "Failed to establish database connection"}
+                    return {"status": "error", "message": "No items found in the daily menu for today."}
+            else:
+                return {"status": "error", "message": "Failed to establish database connection."}
 
-            except Exception as e:
-                return {"status": "error", "message": str(e)}
-            finally:
-                if connection:
-                    connection.close()   
-                    
-        
-    @classmethod
-    def send_notification_query(cls):
-            try:
-                db = DBConnection()
-                connection = db.get_connection()
-
-                if connection:
-                    cursor = connection.cursor()
-                    today_date = datetime.now().strftime("%Y-%m-%d")
-
-                    cursor.execute(
-                        "SELECT item_id, item_name, item_category FROM Daily_Menu WHERE menu_date = %s",
-                        (today_date,)
-                    )
-                    items = cursor.fetchall()
-                    cursor.close()
-
-                    if items:
-                        notification_message = f"Daily menu updated with the following items:\n"
-                        for item in items:
-                            notification_message += f"- {item[1]} ({item[2]})\n"
-                        
-                        cursor = connection.cursor()
-                        cursor.execute(
-                            "INSERT INTO Notification (message, notification_date) VALUES (%s, %s)",
-                            (notification_message, today_date)
-                        )
-                        connection.commit()
-                        cursor.close()
-
-                        return {"status": "success", "message": "Notification sent successfully."}
-                    else:
-                        return {"status": "error", "message": "No items found in the daily menu for today."}
-                else:
-                    return {"status": "error", "message": "Failed to establish database connection."}
-
-            except Exception as e:
-                return {"status": "error", "message": str(e)}
-            finally:
-                if connection:
-                    connection.close()        
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        finally:
+            if connection:
+                connection.close()       
                     
     @classmethod
     def view_discard_menu_query(cls):
