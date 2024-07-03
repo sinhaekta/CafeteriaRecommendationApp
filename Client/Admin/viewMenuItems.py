@@ -22,7 +22,6 @@ class ViewMenu:
             response_data = json.loads(response)
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON response: {str(e)}")
-            print(f"Response content: {response}")
             return
         
         if response_data.get("status") == "success":

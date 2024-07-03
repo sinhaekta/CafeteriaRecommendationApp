@@ -29,8 +29,6 @@ class DiscardFeedback:
                         self.give_feedback_discard_item(notifications)
                     else:
                         print("No discard item notifications found.")
-                else:
-                    print(f"Error: {response_data['message']}")
             else:
                 print("Empty response received from server.")
 
@@ -58,7 +56,6 @@ class DiscardFeedback:
 
                     if response:
                         response_data = json.loads(response)
-                        print("Response:", response_data)
                     else:
                         print("Empty response received from server.")
                     break

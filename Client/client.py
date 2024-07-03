@@ -4,7 +4,6 @@ import socket
 def client_connection(request):
     SERVER_HOST = config.SERVER_HOST
     SERVER_PORT = config.SERVER_PORT
-    print("in client")
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

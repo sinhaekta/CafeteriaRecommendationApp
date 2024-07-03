@@ -13,10 +13,8 @@ class DiscardMenu:
             }
 
             request_json = json.dumps(request_data)
-            print("Request JSON:", request_json)
             response = client_connection(request_json)
-            print("Response:", response)
-
+            
             if response:
                 try:
                     response = response.replace('\\"', '"')

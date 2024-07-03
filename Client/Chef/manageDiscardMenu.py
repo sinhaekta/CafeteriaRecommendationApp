@@ -18,7 +18,6 @@ class ManageDiscardMenu:
                 if response.startswith('"') and response.endswith('"'):
                             response = response.strip('"')       
 
-                print("Response from server:", response) 
                 response_data = json.loads(response)
 
                 if isinstance(response_data, list):  
@@ -53,7 +52,6 @@ class ManageDiscardMenu:
 
             if response:
                 response_data = json.loads(response)
-                print("Response:", response_data)
             else:
                 print("Empty response received from server.")
         except json.JSONDecodeError as e:
@@ -69,7 +67,6 @@ class ManageDiscardMenu:
 
             if response:
                 response_data = json.loads(response)
-                print("Response:", response_data)
             else:
                 print("Empty response received from server.")
         except json.JSONDecodeError as e:

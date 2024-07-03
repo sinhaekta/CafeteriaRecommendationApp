@@ -20,7 +20,6 @@ class CafeteriaApp:
 
     def authenticate_user(self, user_data):
         response = client_connection(user_data)
-        print(response)
         return response
 
     def to_json(self):
@@ -36,7 +35,6 @@ class CafeteriaApp:
         self.get_user_input()
         user_data = self.to_json()
         response = self.authenticate_user(user_data)
-        print(response, type(response))
 
         role = response.strip('"')
         if role == "admin":

@@ -43,10 +43,8 @@ class RollMenu:
             if response:
                 try:
                     response_data = json.loads(response)
-                    print("Response:", response_data)
                 except json.JSONDecodeError as e:
                     print(f"Error decoding JSON response: {e}")
-                    print(f"Response content: {response}")
             else:
                 print("Empty response received from server.")
         except ConnectionError:

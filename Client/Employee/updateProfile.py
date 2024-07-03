@@ -22,7 +22,6 @@ class UserProfile:
             }
 
             response = self.send_profile_update(profile_data)
-            print(response['message'])
 
         except ValueError as ve:
             print(f"ValueError: {ve}. Please enter valid input.")

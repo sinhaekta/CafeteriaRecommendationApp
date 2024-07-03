@@ -31,12 +31,9 @@ class Notification:
                                 print("No notifications found.")
                         else:
                             print(f"Error: {response_data.get('message', 'Unknown error')}")
-                    else:
-                        print(f"Invalid response format: {response_data}")
 
                 except json.JSONDecodeError as e:
                     print(f"JSON decoding failed: {e}")
-                    print(f"Response content: {response}") 
             else:
                 print("Empty response received from server.")
 

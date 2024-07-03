@@ -2,7 +2,6 @@ from DB_Connection.chefQueries import ChefQuery
 from datetime import datetime
 from textblob import TextBlob
 import json
-
 class ChefServiceHandler:
     @staticmethod
     def view_recommended_menu():
@@ -51,8 +50,6 @@ class ChefServiceHandler:
             print(error_message)
             return json.dumps({"status": "error", "message": error_message})
 
-
-
     @staticmethod
     def roll_menu(items):
         try:
@@ -76,7 +73,6 @@ class ChefServiceHandler:
             error_message = f"Error occurred in roll_menu: {str(e)}"
             print(error_message)
             return json.dumps({"status": "error", "message": error_message})
-
 
     @staticmethod
     def send_notification():
@@ -121,5 +117,3 @@ class ChefServiceHandler:
         except Exception as e:
             error_message = f"Error occurred in send_feedback_notification: {str(e)}"
             return json.dumps({"status": "error", "message": error_message})
-        
-    
