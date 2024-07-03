@@ -184,3 +184,111 @@ class EmployeeQuery:
                 if connection:
                     connection.close()                           
              
+    @classmethod
+    def give_feedback_discard_item_query(cls, data):
+        try:
+            user_id = data['user_id']
+            notification_id = data['notification_id']
+            feedback = data['feedback']
+            feedback_date = datetime.now().strftime("%Y-%m-%d")
+
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor()
+
+                cursor.execute("""
+                    INSERT INTO Employee_Discard_Item_Feedback (user_id, notification_id, feedback, feedback_date)
+                    VALUES (%s, %s, %s, %s)
+                """, (user_id, notification_id, feedback, feedback_date))
+
+                connection.commit()
+                cursor.close()
+
+                return {"status": "success", "message": "Feedback submitted successfully"}
+            else:
+                return {"status": "error", "message": "Failed to establish database connection"}
+
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        finally:
+            if connection:
+                connection.close()
+                
+    @classmethod
+    def fetch_discard_item_notifications_query(cls):
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor()
+                cursor.execute("SELECT * FROM Discard_Item_Notification ORDER BY notification_date DESC")
+                notifications = cursor.fetchall()
+                cursor.close()
+
+                if notifications:
+                    formatted_notifications = [
+                        {
+                            "notification_id": notification[0],
+                            "item_id": notification[1],
+                            "message": notification[2],
+                            "notification_date": notification[3].strftime("%Y-%m-%d")
+                        }
+                        for notification in notifications
+                    ]
+                    return {"status": "success", "data": formatted_notifications}
+                else:
+                    return {"status": "error", "message": "No discard item notifications found."}
+            else:
+                return {"status": "error", "message": "Failed to establish database connection."}
+
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        finally:
+            if connection:
+                connection.close()
+                
+    @classmethod
+    def update_user_profile_query(cls, profile_data):
+        try:
+            user_id = profile_data['user_id']
+            diet_type = profile_data['diet_type']
+            spice_level = profile_data['spice_level']
+            cuisine_preference = profile_data['cuisine_preference']
+            sweet_tooth = profile_data['sweet_tooth']
+
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor()
+
+                cursor.execute("SELECT * FROM Employee_Profile WHERE user_id = %s", (user_id,))
+                existing_profile = cursor.fetchone()
+
+                if existing_profile:
+                    cursor.execute("""
+                        UPDATE Employee_Profile 
+                        SET diet_type = %s, spice_level = %s, cuisine_preference = %s, sweet_tooth = %s
+                        WHERE user_id = %s
+                    """, (diet_type, spice_level, cuisine_preference, sweet_tooth, user_id))
+                else:
+                    cursor.execute("""
+                        INSERT INTO Employee_Profile (user_id, diet_type, spice_level, cuisine_preference, sweet_tooth)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (user_id, diet_type, spice_level, cuisine_preference, sweet_tooth))
+
+                connection.commit()
+                cursor.close()
+                return {"status": "success", "message": "User profile updated successfully."}
+
+            else:
+                return {"status": "error", "message": "Failed to establish database connection."}
+
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+        finally:
+            if connection:
+                connection.close()

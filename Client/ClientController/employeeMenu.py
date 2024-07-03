@@ -1,6 +1,8 @@
 from Employee.checkNotification import Notification
 from Employee.orderFood import FoodOrder
 from Employee.giveFeedback import Feedback
+from Employee.discardItemFeedback import DiscardFeedback
+from Employee.updateProfile import UserProfile
 
 class EmployeeMenu:
     def __init__(self):
@@ -22,6 +24,12 @@ class EmployeeMenu:
                 user_id = int(input("Enter your user ID: "))
                 order.give_feedback(user_id)
             elif choice == '4':
+                discard_feedback = DiscardFeedback()
+                discard_feedback.view_discard_item_notifications()
+            elif choice == '5':
+                profile = UserProfile()
+                profile.update_profile()
+            elif choice == '6':
                 print("Exiting....")
                 break
             else:
@@ -32,4 +40,6 @@ class EmployeeMenu:
         print("1. Check Notification")
         print("2. Order Items")
         print("3. Give Feedback")
-        print("4. Exit")
+        print("4. Give Feedback on Discard Item")
+        print("5. Update your Profile")
+        print("6. Exit")

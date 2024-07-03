@@ -60,6 +60,26 @@ class Route:
         elif data["path"] == "view_discard_menu":
             response = ChefServiceHandler.view_discard_menu()
             return response
+        
+        elif data["path"] == "delete_discard_item":
+            response = ChefServiceHandler.delete_discard_item(data["item_id"])
+            return response
+        
+        elif data["path"] == "send_feedback_notification":
+            response = ChefServiceHandler.send_feedback_notification(data["item_id"])
+            return response
+        
+        elif data["path"] == "fetch_discard_item_notifications":
+            response = EmployeeServiceHandler.fetch_discard_item_notifications()
+            return response
+        
+        elif data["path"] == "give_feedback_discard_item":
+            response = EmployeeServiceHandler.give_feedback_discard_item(data)
+            return response
+        
+        elif data["path"] == "update_profile":
+            response = EmployeeServiceHandler.update_user_profile(data)
+            return response
 
         else:
             return {"status": "error", "message": "Invalid path"}
