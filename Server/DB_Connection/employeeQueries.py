@@ -265,6 +265,12 @@ class EmployeeQuery:
             if connection:
                 cursor = connection.cursor()
 
+                cursor.execute("SELECT * FROM User WHERE user_id = %s", (user_id,))
+                user = cursor.fetchone()
+
+                if not user:
+                    return {"status": "error", "message": "User not found."}
+
                 cursor.execute("SELECT * FROM Employee_Profile WHERE user_id = %s", (user_id,))
                 existing_profile = cursor.fetchone()
 

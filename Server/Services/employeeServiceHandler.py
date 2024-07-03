@@ -1,6 +1,6 @@
 from DB_Connection.employeeQueries import EmployeeQuery
 from datetime import datetime, date
-
+import json
 
 class EmployeeServiceHandler:
     
@@ -55,16 +55,17 @@ class EmployeeServiceHandler:
     @staticmethod
     def update_user_profile(data):
         try:
-            profile_data = {
-                "user_id": data["user_id"],
-                "diet_type": data["diet_type"],
-                "spice_level": data["spice_level"],
-                "cuisine_preference": data["cuisine_preference"],
-                "sweet_tooth": data["sweet_tooth"]
-            }
+            profile_data = data['profile_data']
+            user_id = profile_data['user_id']
+            diet_type = profile_data['diet_type']
+            spice_level = profile_data['spice_level']
+            cuisine_preference = profile_data['cuisine_preference']
+            sweet_tooth = profile_data['sweet_tooth']
 
             response = EmployeeQuery.update_user_profile_query(profile_data)
             return response
 
+        except KeyError as e:
+            return {"status": "error", "message": f"KeyError: {e}"}
         except Exception as e:
-            return {"status": "error", "message": str(e)}
+            return {"status": "error", "message": f"Exception: {e}"}
