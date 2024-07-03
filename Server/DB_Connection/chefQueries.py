@@ -169,3 +169,65 @@ class ChefQuery:
         except Exception as e:
             print("Error occurred:", e)
             return json.dumps({"error": str(e)})
+        
+    @classmethod
+    def delete_discard_item_query(cls, item_id):
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor()
+
+                cursor.execute("UPDATE Menu_Item SET is_deleted = 1 WHERE item_id = %s", (item_id,))
+                connection.commit()
+
+                cursor.close()
+                return json.dumps({"status": "success", "message": "Menu item soft deleted successfully"})
+            else:
+                return json.dumps({"status": "error", "message": "Failed to establish database connection"})
+
+        except Exception as e:
+            return json.dumps({"status": "error", "message": str(e)})
+        finally:
+            if connection:
+                connection.close()
+                
+    @classmethod
+    def send_feedback_notification_query(cls, item_id):
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor(dictionary=True)
+                cursor.execute("SELECT name FROM Menu_Item WHERE item_id = %s", (item_id,))
+                item = cursor.fetchone()
+
+                if item:
+                    item_name = item['name']
+                    message = (
+                        f"We are trying to improve your experience with {item_name}. "
+                        "Please provide your feedback and help us. "
+                        f"Q1. What didn’t you like about {item_name}?\n"
+                        f"Q2. How would you like {item_name} to taste?\n"
+                        f"Q3. Share your mom’s recipe."
+                    )
+                    notification_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                    cursor.execute("""
+                        INSERT INTO Discard_Item_Notification (item_id, message, notification_date)
+                        VALUES (%s, %s, %s)
+                    """, (item_id, message, notification_date))
+
+                    connection.commit()
+                    cursor.close()
+                    return json.dumps({"status": "success", "message": "Notification sent successfully"})
+                else:
+                    return json.dumps({"status": "error", "message": "Item not found"})
+
+        except Exception as e:
+            return json.dumps({"status": "error", "message": str(e)})
+        finally:
+            if connection:
+                connection.close()
