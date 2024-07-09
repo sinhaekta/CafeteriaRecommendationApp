@@ -1,0 +1,12 @@
+{
+    "valid_name": "Test Item",
+    "invalid_name": "",
+    "valid_price": 10.5,
+    "invalid_price": -10,
+    "valid_description": "Test Description",
+    "invalid_description": "",
+    "valid_category": "lunch",
+    "invalid_category": "",
+    "valid_item_id": 1,
+    "invalid_item_id": -1
+}
