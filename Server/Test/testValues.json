@@ -8,5 +8,17 @@
     "valid_category": "lunch",
     "invalid_category": "",
     "valid_item_id": 1,
-    "invalid_item_id": -1
+    "invalid_item_id": -1,
+
+    "valid_sentiment_polarity": 0.5,
+    "valid_sentiment_subjectivity": 0.6,
+    "valid_rating": 4.5,
+    "valid_expected_score": 4.5,
+    "valid_discard_id": 1,
+    "valid_expected_average": 5.0, 
+    "recommended_menu_items": [
+        {"item_id": 1, "item_name": "Dish1", "comment": "Great dish!", "rating_value": "10.5"},
+        {"item_id": 2, "item_name": "Dish2", "comment": "Could be better", "rating_value": "6.2"}
+    ]
+    
 }
