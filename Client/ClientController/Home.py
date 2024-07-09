@@ -11,7 +11,7 @@ class CafeteriaApp:
         self.password = None
 
     def display_homepage(self):
-        print("Welcome to the Cafeteria Recommendation Engine")
+        print("\nWelcome to the Cafeteria App!!\n")
         print("Please log in:")
 
     def get_user_input(self):
@@ -36,7 +36,9 @@ class CafeteriaApp:
         user_data = self.to_json()
         response = self.authenticate_user(user_data)
 
-        role = response.strip('"')
+        response_data = json.loads(response)
+        role = response_data.get("role")
+        user_id = response_data.get("user_id")
         if role == "admin":
             menu = AdminMenu()
             menu.main()
@@ -44,7 +46,7 @@ class CafeteriaApp:
             menu = ChefMenu()
             menu.main()
         elif role == "employee":
-            menu = EmployeeMenu()
+            menu = EmployeeMenu(user_id)
             menu.main()
         else:
             print("Invalid role.")

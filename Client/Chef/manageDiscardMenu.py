@@ -1,7 +1,7 @@
 import json
 from client import client_connection
 
-class ManageDiscardMenu:
+class DiscardMenuManagement:
     def __init__(self):
         pass
 
@@ -25,7 +25,7 @@ class ManageDiscardMenu:
                     for item in response_data:
                         print(f"Discard ID: {item['discard_id']}, Item ID: {item['item_id']}, Item Name: {item['item_name']}, Rating: {item['rating_value']}")
 
-                    item_id = int(input("Enter the Item ID to manage: "))
+                    item_id = int(input("\nEnter the Item ID to manage: "))
                     action = input("Enter 'd' to delete the item or 'n' to send notification: ").strip().lower()
 
                     if action == 'd':
@@ -52,6 +52,8 @@ class ManageDiscardMenu:
 
             if response:
                 response_data = json.loads(response)
+                if "success" in response_data:
+                    print("\nItem deleted Successfully!!")
             else:
                 print("Empty response received from server.")
         except json.JSONDecodeError as e:
@@ -67,6 +69,12 @@ class ManageDiscardMenu:
 
             if response:
                 response_data = json.loads(response)
+                if "success" in response_data:
+                    print("\nNotification sent Successfully!!")
+                elif "Duplicate entry" in response_data:
+                    print("\nNotification already sent for today!!")
+                else:
+                    print("Unknown error")
             else:
                 print("Empty response received from server.")
         except json.JSONDecodeError as e:

@@ -5,9 +5,9 @@ class UserProfile:
     def __init__(self):
         pass
     
-    def update_profile(self):
+    def update_profile(self, user_id):
         try:
-            user_id = int(input("Enter your user ID: "))
+            user_id = user_id
             diet_type = input("Please select one - Vegetarian, Non Vegetarian, Eggetarian: ")
             spice_level = input("Please select your spice level - High, Medium, Low: ")
             cuisine_preference = input("What do you prefer most - North Indian, South Indian, Other: ")
@@ -22,6 +22,7 @@ class UserProfile:
             }
 
             response = self.send_profile_update(profile_data)
+            print(response['message'])
 
         except ValueError as ve:
             print(f"ValueError: {ve}. Please enter valid input.")

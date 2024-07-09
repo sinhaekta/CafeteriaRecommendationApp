@@ -12,14 +12,16 @@ class AdminQuery:
 
             if connection:
                 cursor = connection.cursor()
-                cursor.execute("SELECT password, role, name FROM User WHERE name = %s", (username,))
+                cursor.execute("SELECT user_id, password, role, name FROM User WHERE name = %s", (username,))
                 rows = cursor.fetchall()
                 
                 data = []
                 for row in rows:
                     data.append({
-                        "password": row[0],
-                        "role": row[1]
+                        "user_id": row[0],
+                        "password": row[1],
+                        "role": row[2],
+                        "name": row[3]
                     })
 
                 cursor.close()
@@ -66,10 +68,10 @@ class AdminQuery:
 
             if connection:
                 cursor = connection.cursor()
-                cursor.execute("DELETE FROM Menu_Item WHERE item_id = %s", (item_id,))
+                cursor.execute("UPDATE Menu_Item SET is_deleted = TRUE WHERE item_id = %s", (item_id,))
                 connection.commit()
                 cursor.close()
-                return {"status": "success", "message": "Menu item deleted successfully."}
+                return {"status": "success", "message": "Menu item deleted (soft delete) successfully."}
             else:
                 return {"status": "error", "message": "Failed to establish database connection."}
         
@@ -116,7 +118,7 @@ class AdminQuery:
 
             if connection:
                 cursor = connection.cursor()
-                cursor.execute("SELECT * FROM Menu_Item")
+                cursor.execute("SELECT * FROM Menu_Item WHERE is_deleted = FALSE")
                 rows = cursor.fetchall()
                 cursor.close()
                 connection.close()

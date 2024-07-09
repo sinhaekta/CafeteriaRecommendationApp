@@ -46,8 +46,7 @@ class AdminServiceHandler:
         
         except Exception as e:
             return {"status": "error", "message": f"Failed to delete item with ID {item_id}: {str(e)}"}
-
-              
+           
     @staticmethod
     def update_menu_item(item_id, name, price, description, category):
         try:
@@ -79,7 +78,6 @@ class AdminServiceHandler:
         
         except Exception as e:
             return {"status": "error", "message": f"An error occurred: {str(e)}"}
-
 
     @staticmethod
     def view_menu_items():

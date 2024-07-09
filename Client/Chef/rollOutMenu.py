@@ -10,17 +10,17 @@ class RollMenu:
         items = []
         try:
             for meal_time in ["breakfast", "lunch", "dinner"]:
-                print(f"Select 2 items for {meal_time}:")
+                print(f"\nSelect 2 items for {meal_time}:")
                 for i in range(2):
                     try:
-                        item_id = int(input(f"Enter item_id for {meal_time} item {i+1}: "))
-                        item_name = input(f"Enter item_name for {meal_time} item {i+1}: ")
+                        item_id = int(input(f"Enter item Id for {meal_time} item {i+1}: "))
+                        item_name = input(f"Enter item Name for {meal_time} item {i+1}: ")
                         items.append({"item_id": item_id, "item_name": item_name, "item_category": meal_time})
                     except ValueError as ve:
                         print(f"Invalid input: {ve}. Please try again.")
                         return []
         except Exception as e:
-            print(f"Error in get_input_from_chef: {e}")
+            print(f"An Error occurred : {e}")
             return []
         return items
     
@@ -43,6 +43,12 @@ class RollMenu:
             if response:
                 try:
                     response_data = json.loads(response)
+                    if "success" in response_data:
+                        print ("\nDaily Menu Rolled Out successfully!!")
+                    elif "Duplicate entry" in response_data:
+                        print("\nDaily menu cannot be updated twice in a day!!")
+                    else:
+                        print(f"Unexpected error response from server.")
                 except json.JSONDecodeError as e:
                     print(f"Error decoding JSON response: {e}")
             else:

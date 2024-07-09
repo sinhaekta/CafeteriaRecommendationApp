@@ -19,20 +19,19 @@ class Feedback:
                     print("No orders found for this user.")
                     return
 
-                print("Your Orders:")
+                print("\nYour Orders:")
                 for order in orders:
                     print(f"Order ID: {order['order_id']}, "
                           f"Breakfast: {order.get('breakfast_item_name', 'Not available')}, "
                           f"Lunch: {order.get('lunch_item_name', 'Not available')}, "
                           f"Dinner: {order.get('dinner_item_name', 'Not available')}")
 
-                order_id = input("Enter the Order ID for which you want to give feedback: ")
+                order_id = input("\nEnter the Order ID for which you want to give feedback: ")
 
                 feedback_list = []
 
                 for meal_type in ["breakfast", "lunch", "dinner"]:
                     item_id_key = f"{meal_type}_item_id"
-                    item_name_key = f"{meal_type}_item_name"
                     
                     if order.get(item_id_key):
                         rating = float(input(f"Enter your rating for {meal_type.capitalize()} (0 to 5): "))
@@ -57,16 +56,13 @@ class Feedback:
                     feedback_response = json.loads(feedback_response)
 
                 if isinstance(feedback_response, dict) and feedback_response.get("status") == "success":
-                    print("Feedback submitted successfully!")
+                    print("\nFeedback submitted successfully!")
                 else:
                     print("Failed to submit feedback:", feedback_response.get("message"))
             else:
                 print("Failed to fetch orders:", response.get("message", "Unknown error"))
-
         except ValueError as ve:
             print(f"ValueError: {ve}. Please enter valid input.")
-        except json.JSONDecodeError as je:
-            print(f"JSONDecodeError: {je}. Failed to decode JSON.")
         except ConnectionError:
             print("ConnectionError: Failed to connect to the server. Please check your network.")
         except Exception as e:

@@ -1,3 +1,4 @@
+import config
 import mysql.connector
 from mysql.connector import Error
 
@@ -16,10 +17,10 @@ class DBConnection:
     def _connect_to_db(self):
         try:
             self.connection = mysql.connector.connect(
-                host='dbrecommendationengine.cz88smeamkjb.us-east-1.rds.amazonaws.com',
-                database='Cafeteria',
-                user='user',
-                password='password'
+                host = config.DB_HOST,
+                database = config.DB_DATABASE,
+                user = config.DB_USER,
+                password = config.DB_PASSWORD
             )
             if self.connection.is_connected():
                 print("Connected to MySQL database")

@@ -11,7 +11,7 @@ def client_connection(request):
 
     client_socket.send(request.encode('utf-8'))
 
-    response = client_socket.recv(1024).decode('utf-8')
+    response = client_socket.recv(2048).decode('utf-8')
 
     client_socket.close()
     return response

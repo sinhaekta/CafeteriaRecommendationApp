@@ -14,7 +14,7 @@ class DiscardMenu:
 
             request_json = json.dumps(request_data)
             response = client_connection(request_json)
-            
+
             if response:
                 try:
                     response = response.replace('\\"', '"')
@@ -23,8 +23,6 @@ class DiscardMenu:
                         response = response.strip('"')
 
                     response_data = json.loads(response)
-                    print("Received Data:", response_data)
-                    print("Type of Received Data:", type(response_data))
 
                     if isinstance(response_data, list):
                         headers = ["Discard ID", "Item ID", "Item Name", "Rating Value"]

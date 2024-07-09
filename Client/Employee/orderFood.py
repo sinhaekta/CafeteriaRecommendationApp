@@ -5,9 +5,9 @@ class FoodOrder:
     def __init__(self):
         pass
     
-    def order_food(self):
+    def order_food(self, user_id):
         try:
-            user_id = int(input("Enter your user ID: "))
+            user_id = user_id
             breakfast_item_id = int(input("Enter the item ID for breakfast: "))
             lunch_item_id = int(input("Enter the item ID for lunch: "))
             dinner_item_id = int(input("Enter the item ID for dinner: "))
@@ -29,11 +29,9 @@ class FoodOrder:
 
                 try:
                     response_data = json.loads(response)
-                    print("Received Data:", response_data)
-                    print("Type of Received Data:", type(response_data)) 
 
                     if response_data.get("status") == "success":
-                        print("Order placed successfully")
+                        print("\nOrder placed successfully")
                     else:
                         print("Failed to place order:", response_data.get("message"))
 

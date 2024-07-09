@@ -28,7 +28,7 @@ def start_server():
             client_socket, client_address = server_socket.accept()
             print(f"[*] Accepted connection from {client_address[0]}:{client_address[1]}")
 
-            data = client_socket.recv(1024).decode('utf-8')
+            data = client_socket.recv(2048).decode('utf-8')
             print(f"Received data from client: {data}")
 
             try:

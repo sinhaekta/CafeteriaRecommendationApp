@@ -23,8 +23,6 @@ class Recommendation:
                         response = response.strip('"')
 
                     response_data = json.loads(response)
-                    print("Received Data:", response_data)
-                    print("Type of Received Data:", type(response_data))
 
                     if isinstance(response_data, list):
                         headers = ["Item Name", "Average Score"]

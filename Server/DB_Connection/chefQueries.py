@@ -94,8 +94,7 @@ class ChefQuery:
         finally:
             if connection:
                 connection.close()
-
-                         
+                  
     @classmethod
     def send_notification_query(cls):
         try:
@@ -107,6 +106,15 @@ class ChefQuery:
                 today_date = datetime.now().strftime("%Y-%m-%d")
 
                 cursor.execute(
+                    "SELECT * FROM Notification WHERE notification_date = %s",
+                    (today_date,)
+                )
+                existing_notification = cursor.fetchone()
+
+                if existing_notification:
+                    return {"status": "error", "message": "Notification already sent for today."}
+
+                cursor.execute(
                     "SELECT dm.item_id, dm.item_name, dm.item_category, mi.avg_rating "
                     "FROM Daily_Menu dm "
                     "LEFT JOIN Menu_Item mi ON dm.item_id = mi.item_id "
@@ -114,17 +122,16 @@ class ChefQuery:
                     (today_date,)
                 )
                 items = cursor.fetchall()
-                cursor.close()
 
                 if items:
-                    notification_message = f"Daily menu updated with the following items:\n"
+                    notification_message = f"Menu for {today_date}:\n"
                     for item in items:
+                        item_id = item[0]
                         item_name = item[1]
                         item_category = item[2]
                         avg_rating = item[3] if item[3] is not None else "N/A"
-                        notification_message += f"- {item_name} ({item_category}) - Rating: {avg_rating}\n"
-                    
-                    cursor = connection.cursor()
+                        notification_message += f"- Item ID: {item_id}, {item_name} ({item_category}) - Rating: {avg_rating}\n"
+
                     cursor.execute(
                         "INSERT INTO Notification (message, notification_date) VALUES (%s, %s)",
                         (notification_message, today_date)
@@ -135,6 +142,7 @@ class ChefQuery:
                     return {"status": "success", "message": "Notification sent successfully."}
                 else:
                     return {"status": "error", "message": "No items found in the daily menu for today."}
+
             else:
                 return {"status": "error", "message": "Failed to establish database connection."}
 
@@ -142,7 +150,7 @@ class ChefQuery:
             return {"status": "error", "message": str(e)}
         finally:
             if connection:
-                connection.close()       
+                connection.close()
                     
     @classmethod
     def view_discard_menu_query(cls):
@@ -152,11 +160,11 @@ class ChefQuery:
 
             if connection:
                 cursor = connection.cursor(dictionary=True)
-
                 cursor.execute("""
                     SELECT r.item_id, m.name as item_name, MIN(r.rating_value) as rating_value
                     FROM Rating r
                     JOIN Menu_Item m ON r.item_id = m.item_id
+                    WHERE m.is_deleted = 0  
                     GROUP BY r.item_id, m.name
                     ORDER BY rating_value ASC
                     LIMIT 2
@@ -189,29 +197,6 @@ class ChefQuery:
         except Exception as e:
             print("Error occurred:", e)
             return json.dumps({"error": str(e)})
-        
-    @classmethod
-    def delete_discard_item_query(cls, item_id):
-        try:
-            db = DBConnection()
-            connection = db.get_connection()
-
-            if connection:
-                cursor = connection.cursor()
-
-                cursor.execute("UPDATE Menu_Item SET is_deleted = 1 WHERE item_id = %s", (item_id,))
-                connection.commit()
-
-                cursor.close()
-                return json.dumps({"status": "success", "message": "Menu item soft deleted successfully"})
-            else:
-                return json.dumps({"status": "error", "message": "Failed to establish database connection"})
-
-        except Exception as e:
-            return json.dumps({"status": "error", "message": str(e)})
-        finally:
-            if connection:
-                connection.close()
                 
     @classmethod
     def send_feedback_notification_query(cls, item_id):
@@ -221,6 +206,19 @@ class ChefQuery:
 
             if connection:
                 cursor = connection.cursor(dictionary=True)
+                
+
+                today_date = datetime.now().strftime("%Y-%m-%d")
+                cursor.execute(
+                    "SELECT * FROM Discard_Item_Notification WHERE item_id = %s AND DATE(notification_date) = %s",
+                    (item_id, today_date)
+                )
+                existing_notification = cursor.fetchone()
+
+                if existing_notification:
+                    cursor.close()
+                    return json.dumps({"status": "error", "message": "Duplicate entry for Notification!"})
+                
                 cursor.execute("SELECT name FROM Menu_Item WHERE item_id = %s", (item_id,))
                 item = cursor.fetchone()
 
@@ -244,6 +242,7 @@ class ChefQuery:
                     cursor.close()
                     return json.dumps({"status": "success", "message": "Notification sent successfully"})
                 else:
+                    cursor.close()
                     return json.dumps({"status": "error", "message": "Item not found"})
 
         except Exception as e:
@@ -251,3 +250,30 @@ class ChefQuery:
         finally:
             if connection:
                 connection.close()
+                
+    @classmethod
+    def delete_discard_item_query(cls, item_id):
+        try:
+            db = DBConnection()
+            connection = db.get_connection()
+
+            if connection:
+                cursor = connection.cursor()
+
+                cursor.execute("UPDATE Menu_Item SET is_deleted = 1 WHERE item_id = %s", (item_id,))
+                connection.commit()
+
+                cursor.execute("UPDATE Discard_Items SET is_deleted = 1 WHERE item_id = %s", (item_id,))
+                connection.commit()
+
+                cursor.close()
+                return json.dumps({"status": "success", "message": "Item Deleted successfully"})
+            else:
+                return json.dumps({"status": "error", "message": "Failed to establish database connection"})
+
+        except Exception as e:
+            return json.dumps({"status": "error", "message": str(e)})
+        finally:
+            if connection:
+                connection.close()
+

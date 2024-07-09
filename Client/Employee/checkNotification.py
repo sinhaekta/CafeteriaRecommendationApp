@@ -22,15 +22,15 @@ class Notification:
                             notifications = response_data.get("data", [])
                             if notifications:
                                 for notification in notifications:
-                                    print("Notification:")
-                                    print(f"Notification ID: {notification.get('notification_id', '')}")
-                                    print(f"Message: {notification.get('message', '')}")
-                                    print(f"Notification Date: {notification.get('notification_date', '')}")
+                                    print("------------")
+                                    print(f"\n{notification.get('message', '')}")
                                     print("------------")
                             else:
                                 print("No notifications found.")
                         else:
                             print(f"Error: {response_data.get('message', 'Unknown error')}")
+                    else:
+                        print(f"Invalid response format: {response_data}")
 
                 except json.JSONDecodeError as e:
                     print(f"JSON decoding failed: {e}")

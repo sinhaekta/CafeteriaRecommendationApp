@@ -6,7 +6,7 @@ class DiscardFeedback:
     def __init__(self):
         pass
     
-    def view_discard_item_notifications(self):
+    def view_discard_item_notifications(self, user_id):
         try:
             request_data = {
                 "path": "fetch_discard_item_notifications"
@@ -26,9 +26,11 @@ class DiscardFeedback:
                         print()
 
                     if notifications:
-                        self.give_feedback_discard_item(notifications)
+                        self.give_feedback_discard_item(notifications, user_id)
                     else:
                         print("No discard item notifications found.")
+                else:
+                    print(f"Error: {response_data['message']}")
             else:
                 print("Empty response received from server.")
 
@@ -37,14 +39,13 @@ class DiscardFeedback:
         except Exception as e:
             print(f"Error occurred during request: {e}")
 
-    def give_feedback_discard_item(self, notifications):
+    def give_feedback_discard_item(self, notifications, user_id):
         try:
             notification_id = int(input("Enter the Notification ID for feedback: "))
             feedback = input("Enter your feedback: ")
 
             for notification in notifications:
                 if notification['notification_id'] == notification_id:
-                    user_id = int(input("Enter your user ID: "))
                     request_data = {
                         "path": "give_feedback_discard_item",
                         "user_id": user_id,
@@ -56,6 +57,7 @@ class DiscardFeedback:
 
                     if response:
                         response_data = json.loads(response)
+                        print("Response:", response_data)
                     else:
                         print("Empty response received from server.")
                     break

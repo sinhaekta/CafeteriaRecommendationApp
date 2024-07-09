@@ -2,6 +2,7 @@ from DB_Connection.chefQueries import ChefQuery
 from datetime import datetime
 from textblob import TextBlob
 import json
+
 class ChefServiceHandler:
     @staticmethod
     def view_recommended_menu():

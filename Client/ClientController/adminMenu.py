@@ -27,15 +27,15 @@ class AdminMenu:
                 view = ViewMenu()
                 view.view_menu_items()
             elif choice == '5':
-                print("Exiting...")
+                print("Thank You for using the Cafeteria App!!")
                 break
             else:
                 print("Invalid choice. Please try again.")
 
     def display_admin_menu(self):
-        print("Admin Menu")
+        print("\nAdmin Menu")
         print("1. Add Menu Item")
         print("2. Delete Menu Item")
         print("3. Update Menu Item")
         print("4. View Menu Items")
-        print("5. Exit")   
+        print("5. Exit\n")   
