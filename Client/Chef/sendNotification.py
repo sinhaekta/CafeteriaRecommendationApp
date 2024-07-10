@@ -17,8 +17,15 @@ class Notification:
             if response:
                 try:
                     response_data = json.loads(response)
+                    if response_data.get("status") == "success":
+                        print("\nNotification sent successfully!!")
+                    elif response_data.get("status") == "error":
+                        print("\nNotification already sent for today.")
+                    else:
+                        print(f"Unexpected error response from server.")
                 except json.JSONDecodeError as e:
                     print(f"Error decoding JSON response: {e}")
+                    print(f"Response content: {response}")
             else:
                 print("Empty response received from server.")
         

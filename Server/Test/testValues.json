@@ -19,6 +19,19 @@
     "recommended_menu_items": [
         {"item_id": 1, "item_name": "Dish1", "comment": "Great dish!", "rating_value": "10.5"},
         {"item_id": 2, "item_name": "Dish2", "comment": "Could be better", "rating_value": "6.2"}
-    ]
-    
-}
+    ],
+
+    "valid_user_id": 1,
+    "valid_order_data": {"user_id": 1, "item_id": 101, "quantity": 2},
+    "valid_order_id": 10,
+    "valid_feedback_data": {"order_id": 10, "rating": 5, "comment": "Great food!"},
+    "valid_feedback_discard_data": {"discard_id": 20, "rating": 4, "comment": "Not bad."},
+    "valid_profile_data": {"profile_data": {"user_id": 1, "diet_type": "Vegetarian", "spice_level": "Medium", "cuisine_preference": "Italian", "sweet_tooth": "Yes"}},
+    "valid_notifications": ["Notification 1", "Notification 2"],
+    "valid_discard_notifications": ["Discard Notification 1", "Discard Notification 2"],
+    "employee_orders": ["Order 1", "Order 2"],
+    "order_confirmation": {"status": "success", "message": "Order placed successfully"},
+    "feedback_confirmation": {"status": "success", "message": "Feedback submitted successfully"},
+    "profile_update_confirmation": {"status": "success", "message": "Profile updated successfully"}
+  }
+  
