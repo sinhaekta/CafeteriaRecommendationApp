@@ -1,6 +1,6 @@
 import json
 from tabulate import tabulate
-from client import client_connection
+from Client import client_connection
 
 class DiscardMenu:
     def __init__(self):

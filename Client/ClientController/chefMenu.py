@@ -1,9 +1,9 @@
-from Chef.rollOutMenu import RollMenu
-from Chef.viewRecommendation import Recommendation
-from Chef.sendNotification import Notification
-from Chef.viewDiscardMenu import DiscardMenu
-from Chef.manageDiscardMenu import DiscardMenuManagement
-from Admin.viewMenuItems import ViewMenu
+from Chef.RollOutMenu import RollMenu
+from Chef.ViewRecommendation import Recommendation
+from Chef.SendNotification import Notification
+from Chef.ViewDiscardMenu import DiscardMenu
+from Chef.ManageDiscardMenu import DiscardMenuManagement
+from Admin.ViewMenuItems import ViewMenu
 
 class ChefMenu:
     def __init__(self):

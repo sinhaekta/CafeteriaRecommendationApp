@@ -1,8 +1,8 @@
-from client import client_connection
-from Admin.addMenuItem import AddMenu
-from Admin.deleteMenuItem import DeleteMenu
-from Admin.updateMenuItem import UpdateMenu
-from Admin.viewMenuItems import ViewMenu
+from Client import client_connection
+from Admin.AddMenuItem import AddMenu
+from Admin.DeleteMenuItem import DeleteMenu
+from Admin.UpdateMenuItem import UpdateMenu
+from Admin.ViewMenuItems import ViewMenu
 
 class AdminMenu:
     

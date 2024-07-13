@@ -1,9 +1,9 @@
 import json
-from DB_Connection.dbConnect import DBConnection
+from DB_Connection.DbConnect import DBConnection
 from decimal import Decimal
 import traceback
 
-class AdminQuery:
+class AdminDBOperation:
     @classmethod
     def authenticate_user_query(cls, username):
         try:

@@ -1,9 +1,9 @@
 import json
 from getpass import getpass
-from client import client_connection
-from ClientController.adminMenu import AdminMenu
-from ClientController.chefMenu import ChefMenu
-from ClientController.employeeMenu import EmployeeMenu
+from Client import client_connection
+from ClientController.AdminMenu import AdminMenu
+from ClientController.ChefMenu import ChefMenu
+from ClientController.EmployeeMenu import EmployeeMenu
 
 class CafeteriaApp:
     def __init__(self):

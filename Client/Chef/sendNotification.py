@@ -1,5 +1,5 @@
 import json
-from client import client_connection
+from Client import client_connection
 
 class Notification:
     def __init__(self):
