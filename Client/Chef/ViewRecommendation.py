@@ -1,15 +1,15 @@
 import json
 from tabulate import tabulate
-from client import client_connection
+from Client import client_connection
 
-class DiscardMenu:
+class Recommendation:
     def __init__(self):
         pass
     
-    def view_discard_menu(self):
+    def view_recommendation(self):
         try:
             request_data = {
-                "path": "view_discard_menu"
+                "path": "view_recommended_menu"
             }
 
             request_json = json.dumps(request_data)
@@ -25,11 +25,9 @@ class DiscardMenu:
                     response_data = json.loads(response)
 
                     if isinstance(response_data, list):
-                        headers = ["Discard ID", "Item ID", "Item Name", "Rating Value"]
-                        table_data = [[item.get("discard_id", ""),
-                                       item.get("item_id", ""),
-                                       item.get("item_name", ""),
-                                       item.get("rating_value", "")] for item in response_data]
+                        headers = ["Item Name", "Average Score"]
+                        table_data = [[item.get("item_name", ""),
+                                       item.get("average_score", "")] for item in response_data]
                         table = tabulate(table_data, headers, tablefmt="grid")
                         print(table)
                     else:
