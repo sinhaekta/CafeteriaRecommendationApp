@@ -1,6 +1,6 @@
-import Config
+import config
 import json
-from Client import client_connection
+from client import client_connection
 
 class DeleteMenu:
     
@@ -8,14 +8,13 @@ class DeleteMenu:
         pass
     
     def delete_menu_item(self):
-
-        attempts = Config.MAX_ATTEMPT
+        attempts = config.MAX_ATTEMPT
         
-        while attempts > Config.MIN_ATTEMPT:
+        while attempts > config.MIN_ATTEMPT:
             try:
                 item_id = int(input("Enter item ID to delete: ")) 
 
-                if item_id <= Config.MIN_ATTEMPT:
+                if item_id <= config.MIN_ATTEMPT:
                     raise ValueError("Item ID must be a positive integer.")
 
                 request_data = {
@@ -37,7 +36,7 @@ class DeleteMenu:
             except ValueError as ve:
                 print(f"Invalid input: {ve}. Please enter a valid item ID (a positive integer).")
                 attempts -= 1
-                if attempts > Config.MIN_ATTEMPT:
+                if attempts > config.MIN_ATTEMPT:
                     print(f"You have {attempts} more attempt(s).")
             
             except json.JSONDecodeError:
@@ -52,5 +51,5 @@ class DeleteMenu:
                 print(f"An unexpected error occurred: {e}")
                 break
 
-        if attempts == Config.MIN_ATTEMPT:
+        if attempts == config.MIN_ATTEMPT:
             print("You have exceeded maximum attempts. Please try later")

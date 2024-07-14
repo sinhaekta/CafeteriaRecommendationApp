@@ -1,8 +1,8 @@
-from Employee.CheckNotification import Notification
-from Employee.OrderFood import FoodOrder
-from Employee.GiveFeedback import Feedback
-from Employee.DiscardItemFeedback import DiscardFeedback
-from Employee.UpdateProfile import UserProfile
+from Employee.checkNotification import Notification
+from Employee.orderFood import FoodOrder
+from Employee.giveFeedback import Feedback
+from Employee.discardItemFeedback import DiscardFeedback
+from Employee.updateProfile import UserProfile
 
 class EmployeeMenu:
     def __init__(self, user_id):

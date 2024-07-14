@@ -1,9 +1,8 @@
-from DB_Connection.AdminDBOperations import AdminDBOperation
-from DB_Connection.AdminDBOperations import AdminDBOperation
+from DB_Connection.adminQueries import AdminQuery
 from decimal import Decimal
 import pymysql
 
-class AdminService:
+class AdminServiceHandler:
     @staticmethod
     def add_menu_item(name, price, description, category):
         try:
@@ -18,7 +17,7 @@ class AdminService:
             if not category:
                 raise ValueError("Category cannot be empty.")
             
-            feedback = AdminDBOperation.add_menu_item_query(name, price, description, category)
+            feedback = AdminQuery.add_menu_item_query(name, price, description, category)
             return feedback
 
         except ValueError as ve:
@@ -35,7 +34,7 @@ class AdminService:
             if not isinstance(item_id, int) or item_id <= 0:
                 raise ValueError("Invalid item_id. It must be a positive integer.")
 
-            response = AdminDBOperation.delete_menu_item_query(item_id)
+            response = AdminQuery.delete_menu_item_query(item_id)
             
             if response.get("status") == "success":
                 return {"status": "success", "message": "Menu item deleted successfully."}
@@ -67,7 +66,7 @@ class AdminService:
             if not isinstance(category, str) or not category.strip():
                 raise ValueError("Invalid category. It must be a non-empty string.")
 
-            response = AdminDBOperation.update_menu_item_query(item_id, name, price, description, category)
+            response = AdminQuery.update_menu_item_query(item_id, name, price, description, category)
 
             if response.get("status") == "success":
                 return {"status": "success", "message": "Menu item updated successfully."}
@@ -83,7 +82,7 @@ class AdminService:
     @staticmethod
     def view_menu_items():
         try:
-            rows = AdminDBOperation.view_menu_items_query()
+            rows = AdminQuery.view_menu_items_query()
 
             result = [
                 {

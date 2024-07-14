@@ -1,5 +1,5 @@
 import json
-from Client import client_connection  
+from client import client_connection  
 from tabulate import tabulate
 
 class ViewMenu:

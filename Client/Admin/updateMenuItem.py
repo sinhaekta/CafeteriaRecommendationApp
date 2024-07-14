@@ -1,6 +1,6 @@
-import Config
+import config
 import json
-from Client import client_connection
+from client import client_connection
 
 class UpdateMenu:
     
@@ -8,12 +8,12 @@ class UpdateMenu:
         pass
     
     def update_menu_item(self):
-        attempts = Config.MAX_ATTEMPT
+        attempts = config.MAX_ATTEMPT
         
-        while attempts > Config.MIN_ATTEMPT:
+        while attempts > config.MIN_ATTEMPT:
             try:
                 item_id = int(input("Enter item ID to update: "))  
-                if item_id <= Config.MIN_ATTEMPT:
+                if item_id <= config.MIN_ATTEMPT:
                     raise ValueError("Item ID must be a positive integer.")
                 
                 name = input("Enter new item name: ").strip()
@@ -21,7 +21,7 @@ class UpdateMenu:
                     raise ValueError("Item name cannot be empty.")
                 
                 price = float(input("Enter new item price: "))
-                if price <= Config.MIN_ATTEMPT:
+                if price <= config.MIN_ATTEMPT:
                     raise ValueError("Price must be a positive number.")
                 
                 description = input("Enter new item description: ").strip()
@@ -56,7 +56,7 @@ class UpdateMenu:
             except ValueError as ve:
                 print(f"Input error: {ve}")
                 attempts -= 1
-                if attempts > Config.MIN_ATTEMPT:
+                if attempts > config.MIN_ATTEMPT:
                     print(f"You have {attempts} more attempt(s). Please try again.")
             
             except json.JSONDecodeError:
@@ -71,5 +71,5 @@ class UpdateMenu:
                 print(f"An unexpected error occurred: {e}")
                 break
 
-        if attempts == Config.MIN_ATTEMPT:
+        if attempts == config.MIN_ATTEMPT:
             print("You have exceeded maximum attempts. Please try later")

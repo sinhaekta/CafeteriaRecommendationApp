@@ -1,4 +1,4 @@
-import Config
+import config
 import mysql.connector
 from mysql.connector import Error
 
@@ -17,10 +17,10 @@ class DBConnection:
     def _connect_to_db(self):
         try:
             self.connection = mysql.connector.connect(
-                host = Config.DB_HOST,
-                database = Config.DB_DATABASE,
-                user = Config.DB_USER,
-                password = Config.DB_PASSWORD
+                host = config.DB_HOST,
+                database = config.DB_DATABASE,
+                user = config.DB_USER,
+                password = config.DB_PASSWORD
             )
             if self.connection.is_connected():
                 print("Connected to MySQL database")

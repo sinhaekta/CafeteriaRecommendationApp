@@ -1,6 +1,6 @@
-import Config
+import config
 import json
-from Client import client_connection
+from client import client_connection
 
 class RollMenu:
     def __init__(self):

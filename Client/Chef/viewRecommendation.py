@@ -1,6 +1,6 @@
 import json
 from tabulate import tabulate
-from Client import client_connection
+from client import client_connection
 
 class Recommendation:
     def __init__(self):

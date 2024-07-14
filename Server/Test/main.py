@@ -5,7 +5,7 @@ def main():
     test_dir = os.path.dirname(__file__)  
     
     loader = unittest.TestLoader()
-    suite = loader.discover(test_dir, pattern="Test*.py")  
+    suite = loader.discover(test_dir, pattern="test*.py")  
 
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)

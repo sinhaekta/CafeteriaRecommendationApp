@@ -1,9 +1,9 @@
-import Config
+import config
 import socket
 
 def client_connection(request):
-    SERVER_HOST = Config.SERVER_HOST
-    SERVER_PORT = Config.SERVER_PORT
+    SERVER_HOST = config.SERVER_HOST
+    SERVER_PORT = config.SERVER_PORT
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

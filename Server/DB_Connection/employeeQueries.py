@@ -1,12 +1,12 @@
 import json
-from DB_Connection.DbConnect import DBConnection
+from DB_Connection.dbConnect import DBConnection
 from decimal import Decimal
 from textblob import TextBlob
 import traceback
 from datetime import datetime
 from datetime import date
 
-class EmployeeDBOperation:  
+class EmployeeQuery:  
     @classmethod
     def check_notification_query(cls):
         try:
