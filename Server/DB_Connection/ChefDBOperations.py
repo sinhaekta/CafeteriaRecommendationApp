@@ -1,11 +1,11 @@
 import json
-from DB_Connection.dbConnect import DBConnection
+from DB_Connection.DbConnect import DBConnection
 from decimal import Decimal
 from textblob import TextBlob
 import traceback
 from datetime import datetime
     
-class ChefQuery:  
+class ChefDBOperation:  
     @classmethod
     def view_recommended_menu_query(cls):
         try:

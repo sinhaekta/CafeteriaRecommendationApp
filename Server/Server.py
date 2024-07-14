@@ -1,8 +1,8 @@
 import socket
 import signal
 import json
-import config
-from ServerController.route import Route  
+import Config
+from ServerController.RouteController import RouteController
 
 def signal_handler(sig, frame):
     print("\nStopping server...")
@@ -12,8 +12,8 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 def start_server():
-    SERVER_HOST = config.SERVER_HOST 
-    SERVER_PORT = config.SERVER_PORT
+    SERVER_HOST = Config.SERVER_HOST 
+    SERVER_PORT = Config.SERVER_PORT
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -38,7 +38,7 @@ def start_server():
                 continue 
             print(json_data)
             try:
-                response = Route.redirect_client_data(json_data)
+                response = RouteController.redirect_client_data(json_data)
                 print(response, type(response))
                 response_json = json.dumps(response) 
             except Exception as e:

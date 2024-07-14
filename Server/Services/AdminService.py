@@ -1,8 +1,9 @@
-from DB_Connection.adminQueries import AdminQuery
+from DB_Connection.AdminDBOperations import AdminDBOperation
+from DB_Connection.AdminDBOperations import AdminDBOperation
 from decimal import Decimal
 import pymysql
 
-class AdminServiceHandler:
+class AdminService:
     @staticmethod
     def add_menu_item(name, price, description, category):
         try:
@@ -17,7 +18,7 @@ class AdminServiceHandler:
             if not category:
                 raise ValueError("Category cannot be empty.")
             
-            feedback = AdminQuery.add_menu_item_query(name, price, description, category)
+            feedback = AdminDBOperation.add_menu_item_query(name, price, description, category)
             return feedback
 
         except ValueError as ve:
@@ -34,7 +35,7 @@ class AdminServiceHandler:
             if not isinstance(item_id, int) or item_id <= 0:
                 raise ValueError("Invalid item_id. It must be a positive integer.")
 
-            response = AdminQuery.delete_menu_item_query(item_id)
+            response = AdminDBOperation.delete_menu_item_query(item_id)
             
             if response.get("status") == "success":
                 return {"status": "success", "message": "Menu item deleted successfully."}
@@ -66,7 +67,7 @@ class AdminServiceHandler:
             if not isinstance(category, str) or not category.strip():
                 raise ValueError("Invalid category. It must be a non-empty string.")
 
-            response = AdminQuery.update_menu_item_query(item_id, name, price, description, category)
+            response = AdminDBOperation.update_menu_item_query(item_id, name, price, description, category)
 
             if response.get("status") == "success":
                 return {"status": "success", "message": "Menu item updated successfully."}
@@ -82,7 +83,7 @@ class AdminServiceHandler:
     @staticmethod
     def view_menu_items():
         try:
-            rows = AdminQuery.view_menu_items_query()
+            rows = AdminDBOperation.view_menu_items_query()
 
             result = [
                 {

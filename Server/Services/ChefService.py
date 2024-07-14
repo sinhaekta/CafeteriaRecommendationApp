@@ -1,13 +1,13 @@
-from DB_Connection.chefQueries import ChefQuery
+from DB_Connection.ChefDBOperations import ChefDBOperation
 from datetime import datetime
 from textblob import TextBlob
 import json
 
-class ChefServiceHandler:
+class ChefService:
     @staticmethod
     def view_recommended_menu():
         try:
-            feedback_data = ChefQuery.view_recommended_menu_query()
+            feedback_data = ChefDBOperation.view_recommended_menu_query()
 
             if not feedback_data:
                 return json.dumps({"status": "error", "message": "No feedback data available"})
@@ -34,7 +34,7 @@ class ChefServiceHandler:
 
             average_score = {item_name: round(min(sum(scores) / len(scores), 5.0), 2) for item_name, scores in item_rating.items()}
 
-            update_status = ChefQuery.update_avg_rating(average_score)
+            update_status = ChefDBOperation.update_avg_rating(average_score)
 
             if not update_status:
                 return json.dumps({"status": "error", "message": "Failed to update average ratings in Menu_Item table"})
@@ -67,7 +67,7 @@ class ChefServiceHandler:
                 for item in items
             ]
 
-            result = ChefQuery.roll_menu_item_query(daily_menu)
+            result = ChefDBOperation.roll_menu_item_query(daily_menu)
             return json.dumps(result)
 
         except Exception as e:
@@ -78,7 +78,7 @@ class ChefServiceHandler:
     @staticmethod
     def send_notification():
         try:
-            return ChefQuery.send_notification_query()
+            return ChefDBOperation.send_notification_query()
         
         except Exception as e:
             error_message = f"Error occurred in send_notification: {str(e)}"
@@ -88,7 +88,7 @@ class ChefServiceHandler:
     @staticmethod
     def view_discard_menu():
         try:
-            discard_menu_json = ChefQuery.view_discard_menu_query()
+            discard_menu_json = ChefDBOperation.view_discard_menu_query()
 
             if not discard_menu_json:
                 return json.dumps({"status": "error", "message": "No discard menu data available"})
@@ -104,7 +104,7 @@ class ChefServiceHandler:
     @staticmethod
     def delete_discard_item(item_id):
         try:
-            return ChefQuery.delete_discard_item_query(item_id)
+            return ChefDBOperation.delete_discard_item_query(item_id)
         
         except Exception as e:
             error_message = f"Error occurred in delete_discard_item: {str(e)}"
@@ -113,7 +113,7 @@ class ChefServiceHandler:
     @staticmethod
     def send_feedback_notification(item_id):
         try:
-            return ChefQuery.send_feedback_notification_query(item_id)
+            return ChefDBOperation.send_feedback_notification_query(item_id)
         
         except Exception as e:
             error_message = f"Error occurred in send_feedback_notification: {str(e)}"

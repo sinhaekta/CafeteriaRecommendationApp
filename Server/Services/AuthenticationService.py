@@ -1,16 +1,12 @@
-from DB_Connection.adminQueries import AdminQuery
+from DB_Connection.AdminDBOperations import AdminDBOperation
 
-class Authentication:
+class AuthenticationService:
     @staticmethod
     def authenticate_user(data):
         username = data["username"]
         password = data["password"]
-        print(username, password)
-        print(type(username))
         
-        json_data = AdminQuery.authenticate_user_query(username)
-        print(json_data)
-        print(type(json_data))
+        json_data = AdminDBOperation.authenticate_user_query(username)
         
         if json_data:
             actual_password = json_data[0]["password"]
