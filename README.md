@@ -1,6 +1,5 @@
 # Cafeteria Recommendation App
 
-## Overview
 -> This project is a Cafeteria Recommendation System designed to manage cafeteria operations such as menu management, food recommendation, and notifications. 
 
 -> The project is implemented in Python and uses MySQL for the database.
@@ -11,8 +10,8 @@
 
 -> The entry point for the server-side application is 'ServerMain.py'.
 
-## Project Structure:
-```
+# Project Structure:
+
 ├── Client
 │   ├── Admin
 │   │   ├── AddMenuItem.py
@@ -70,4 +69,3 @@
         ├── TestChefServices.py
         ├── TestEmployeeServices.py
         └── TestValues.json
-```
